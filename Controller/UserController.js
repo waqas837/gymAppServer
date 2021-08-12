@@ -7,9 +7,10 @@ const genToken = (id) => {
   const token = jwt.sign({ id }, "thisissecretkey");
   return token;
 };
-// user signup
+// user signup not by admin but on startpage
 exports.signup = asyncCatch(async (req, res) => {
   const { username, email, password } = req.body;
+  console.log(req.body);
   //if user exists
   const userAlreadyExists = await signUp.findOne({ email });
   if (userAlreadyExists) {
@@ -72,37 +73,5 @@ exports.login = asyncCatch(async (req, res) => {
     }
   } else if (!findUser && !hashedPassword) {
     res.json({ invalidUser: "Invalid email or passowrd" });
-  }
-});
-
-//user added by admin
-exports.signupAdmin = asyncCatch(async (req, res) => {
-  const { username, email, password, cpassword } = req.body;
-  console.log(password, cpassword);
-  //if user exists
-  const userAlreadyExists = await signUp.findOne({ email });
-  if (userAlreadyExists) {
-    res.json({
-      userExists: "User Already exists",
-    });
-  }
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const userSignedup = await signUp.create({
-    username,
-    email,
-    password: hashedPassword,
-    cpassword: undefined,
-  });
-  const token = genToken(userSignedup._id);
-  // console.log(token);
-  if (userSignedup) {
-    res.cookie("user", token);
-    res.status(201).json({
-      success:true,
-      message: "Account created Successfuly",
-      userDetails: userSignedup,
-    });
-  } else {
-    res.json({ ErrorMessage: "Password and Confirm password must be same" });
   }
 });

@@ -1,14 +1,15 @@
 const userController = require("../Controller/UserController");
-const UserOperationsController = require("../Controller/UserOperationsController");
+const UserOperationsController = require("../Controller/UserOperationsByAdmin");
 const Auth = require("../Middleware/Auth");
 const express = require("express");
 const router = express.Router();
 router.route("/signup").post(userController.signup);
 router.route("/login").post(userController.login);
+// route for only admin Login but it exists in user controller,
 router.route("/adminLogin").post(userController.adminlogin);
-router.route("/signupAdmin").post(Auth, userController.signupAdmin);
+//these routes for the admin for take crud actions
+router.route("/signupAdmin").post(Auth, UserOperationsController.signupAdmin);
 
-// make these routes protected
 router.route("/findAllUsers").get(Auth, UserOperationsController.FetchAllUsers);
 router
   .route("/deleteSingleUser/:_id")

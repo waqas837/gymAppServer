@@ -27,5 +27,6 @@ const userSignup = mongoose.Schema({
     type: Boolean,
     default: true,
   },
+  role:String,
 });
 module.exports = mongoose.model("User", userSignup);

@@ -35,3 +35,31 @@ exports.updateUser = asyncCatch(async (req, res) => {
       .json({ success: true, message: "User updated successfully" });
   }
 });
+
+//user added by admin
+exports.signupAdmin = asyncCatch(async (req, res) => {
+  const { username, email, password, role } = req.body;
+  console.log(req.body);
+  //if user exists
+  const userAlreadyExists = await signUp.findOne({ email });
+  if (userAlreadyExists) {
+    res.json({
+      userExists: "User Already exists",
+    });
+  }
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const userSignedup = await signUp.create({
+    username,
+    email,
+    password: hashedPassword,
+    role,
+  });
+
+  if (userSignedup) {
+    res.status(201).json({
+      success: true,
+      message: "Account created Successfuly",
+      userDetails: userSignedup,
+    });
+  }
+});

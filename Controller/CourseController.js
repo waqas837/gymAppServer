@@ -1,8 +1,10 @@
 const CourseModel = require("../Model/CourseSchema");
+const userModel = require("../Model/SignupSchema");
 const asycCatch = require("../Utils/asyncCatch");
 const fs = require("fs");
 //1.add a new course
 exports.addNewCourse = asycCatch(async (req, res) => {
+  // console.log(req.body);
   const data = await CourseModel.create(req.body);
   if (data) {
     res.status(200).json({ success: true, courses: data });
@@ -151,4 +153,30 @@ exports.addInstructorProfile = asycCatch(async (req, res) => {
       message: "Data failed to upload instructor profile in database",
     });
   }
+});
+
+//9.get Instructors/learners from usersSinged by admin
+exports.getInstructors = asycCatch(async (req, res) => {
+  const findData = await userModel.find({ role: "Trainer" }).select("username");
+  if (findData) {
+    res.status(200).json({ success: true, findData });
+  } else {
+    res.status(404).json({
+      message: "Data failed to upload instructor profile in database",
+    });
+  }
+});
+
+//10.udpate instructor data without image
+exports.updatCourse = asycCatch(async (req, res) => {
+  const { _id } = req.params;
+  console.log(req.body);
+  // const findData = await CourseModel.findByIdAndUpdate({ _id }, req.body);
+  // if (findData) {
+  //   res.status(200).json({ success: true, findData });
+  // } else {
+  //   res.status(404).json({
+  //     message: "Data failed to upload instructor profile in database",
+  //   });
+  // }
 });
