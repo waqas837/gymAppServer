@@ -7,6 +7,7 @@ const genToken = (id) => {
   const token = jwt.sign({ id }, "thisissecretkey");
   return token;
 };
+// Admin API'S
 // user signup not by admin but on startpage
 exports.signup = asyncCatch(async (req, res) => {
   const { username, email, password } = req.body;
@@ -73,5 +74,38 @@ exports.login = asyncCatch(async (req, res) => {
     }
   } else if (!findUser && !hashedPassword) {
     res.json({ invalidUser: "Invalid email or passowrd" });
+  }
+});
+
+
+
+// Following api are for user loginAnd Signup from frontend
+// 1.user singup
+exports.signupUser = asyncCatch(async (req, res) => {
+  const { username, email, password } = req.body;
+  // console.log(req.body);
+  // if user exists
+  const userAlreadyExists = await signUp.findOne({ email });
+  if (userAlreadyExists) {
+    res.json({
+      userExists: "User Already exists",
+    });
+  }
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const userSignedup = await signUp.create({
+    username,
+    email,
+    password: hashedPassword,
+  });
+  const token = genToken(userSignedup._id);
+  // console.log(token);
+  if (userSignedup) {
+    res.cookie("user", token);
+    res.status(201).json({
+      message: "Account created Successfuly",
+      userDetails: userSignedup,
+    });
+  } else {
+    res.json({ ErrorMessage: "Password and Confirm password must be same" });
   }
 });

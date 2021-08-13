@@ -3,6 +3,10 @@ const UserOperationsController = require("../Controller/UserOperationsByAdmin");
 const Auth = require("../Middleware/Auth");
 const express = require("express");
 const router = express.Router();
+// Api's for User Login And SignUp from frontend only
+router.route("/signupUser").post(userController.signupUser);
+
+// Following Api's are for the ADMIN ONLY(so we can't share it with anyone)
 router.route("/signup").post(userController.signup);
 router.route("/login").post(userController.login);
 // route for only admin Login but it exists in user controller,

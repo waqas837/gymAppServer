@@ -34,6 +34,14 @@ router
   .post(Auth, upload.single("image"), courseController.addInstructorProfile);
 
 router.route("/getInstructors").get(Auth, courseController.getInstructors);
-// it just remains to do
-router.route("/updatCourse/:_id").put(Auth, courseController.updatCourse);
+
+router.route("/updatCourse/:_id").patch(Auth, courseController.updatCourse);
+// update the image of instructor
+router
+  .route("/updateInstructorProfile/:_id")
+  .patch(
+    Auth,
+    upload.single("image"),
+    courseController.updateInstructorProfile
+  );
 module.exports = router;

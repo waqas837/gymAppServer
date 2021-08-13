@@ -171,12 +171,29 @@ exports.getInstructors = asycCatch(async (req, res) => {
 exports.updatCourse = asycCatch(async (req, res) => {
   const { _id } = req.params;
   console.log(req.body);
-  // const findData = await CourseModel.findByIdAndUpdate({ _id }, req.body);
-  // if (findData) {
-  //   res.status(200).json({ success: true, findData });
-  // } else {
-  //   res.status(404).json({
-  //     message: "Data failed to upload instructor profile in database",
-  //   });
-  // }
+  const findData = await CourseModel.findByIdAndUpdate({ _id }, req.body);
+  if (findData) {
+    res.status(200).json({ success: true, findData });
+  } else {
+    res.status(404).json({
+      message: "Data failed to upload instructor profile in database",
+    });
+  }
+});
+
+//10.udpate updateInstructorProfile image
+exports.updateInstructorProfile = asycCatch(async (req, res) => {
+  const { _id } = req.params;
+  const image = req.file.path;
+  const findData = await CourseModel.findByIdAndUpdate(
+    { _id },
+    { instructorimage: image }
+  );
+  if (findData) {
+    res.status(200).json({ success: true, findData });
+  } else {
+    res.status(404).json({
+      message: "Data failed to upload instructor profile in database",
+    });
+  }
 });
