@@ -28,7 +28,7 @@ app.use(helmet()); //headers protection
 app.use(morgan("dev"));
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: ["http://localhost:3000","https://gymapp1122.herokuapp.com/"],
     credentials: true,
   })
 );
