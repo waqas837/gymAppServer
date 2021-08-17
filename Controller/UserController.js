@@ -54,7 +54,7 @@ exports.adminlogin = asyncCatch(async (req, res) => {
       res.cookie("admin", token);
       res
         .status(200)
-        .json({ message: "successfully logged in", userDetails: findUser });
+        .json({ success:true,message: "successfully logged in", userDetails: findUser });
     }
   }
 });
