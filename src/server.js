@@ -10,7 +10,7 @@ app.listen(Port, () => {
 //database connection
 mongoose
   .connect(
-    "mongodb://localhost/GymApp",
+    "mongodb+srv://online:online@cluster0.2oyoz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
