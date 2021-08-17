@@ -51,7 +51,7 @@ exports.adminlogin = asyncCatch(async (req, res) => {
       res.json({ invalidUser: "Invalid email or passowrd" });
     } else if (findUser && hashedPassword) {
       const token = genToken(findUser._id);
-      res.cookie("admin", token, { secure: true });
+      res.cookie("admin", token, {secure: true});
       res.status(200).json({
         success: true,
         message: "successfully logged in",
