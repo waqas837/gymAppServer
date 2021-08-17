@@ -28,7 +28,7 @@ exports.signup = asyncCatch(async (req, res) => {
   const token = genToken(userSignedup._id);
   // console.log(token);
   if (userSignedup) {
-    res.cookie("user", token);
+    res.cookie("user", token, {secure: true});
     res.status(201).json({
       message: "Account created Successfuly",
       userDetails: userSignedup,
@@ -69,7 +69,7 @@ exports.login = asyncCatch(async (req, res) => {
     const hashedPassword = await bcrypt.compare(password, findUser.password);
     if (findUser && hashedPassword) {
       const token = genToken(findUser._id);
-      res.cookie("user", token);
+      res.cookie("user", token, {secure: true});
       res
         .status(200)
         .json({ message: "successfully logged in", userDetails: findUser });
@@ -100,7 +100,7 @@ exports.signupUser = asyncCatch(async (req, res) => {
   const token = genToken(userSignedup._id);
   // console.log(token);
   if (userSignedup) {
-    res.cookie("user", token);
+    res.cookie("user", token, {secure: true});
     res.status(201).json({
       message: "Account created Successfuly",
       userDetails: userSignedup,
