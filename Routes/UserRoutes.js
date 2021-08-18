@@ -5,6 +5,7 @@ const express = require("express");
 const router = express.Router();
 // Api's for User Login And SignUp from frontend only
 router.route("/signupUser").post(userController.signupUser);
+router.route("/userLogin").post(userController.userLogin);
 
 // Following Api's are for the ADMIN ONLY(so we can't share it with anyone)
 router.route("/signup").post(userController.signup);

@@ -28,7 +28,7 @@ exports.signup = asyncCatch(async (req, res) => {
   const token = genToken(userSignedup._id);
   // console.log(token);
   if (userSignedup) {
-    res.cookie("user", token, {secure: true});
+    res.cookie("user", token);
     res.status(201).json({
       message: "Account created Successfuly",
       userDetails: userSignedup,
@@ -51,12 +51,14 @@ exports.adminlogin = asyncCatch(async (req, res) => {
       res.json({ invalidUser: "Invalid email or passowrd" });
     } else if (findUser && hashedPassword) {
       const token = genToken(findUser._id);
-      res.cookie("admin", token, {secure: true});
-      res.status(200).json({
-        success: true,
-        message: "successfully logged in",
-        userDetails: findUser,
-      });
+      res.cookie("admin", token);
+      res
+        .status(200)
+        .json({
+          success: true,
+          message: "successfully logged in",
+          userDetails: findUser,
+        });
     }
   }
 });
@@ -69,10 +71,12 @@ exports.login = asyncCatch(async (req, res) => {
     const hashedPassword = await bcrypt.compare(password, findUser.password);
     if (findUser && hashedPassword) {
       const token = genToken(findUser._id);
-      res.cookie("user", token, {secure: true});
-      res
-        .status(200)
-        .json({ message: "successfully logged in", userDetails: findUser });
+      res.cookie("user", token);
+      res.status(200).json({
+        success: true,
+        message: "successfully logged in",
+        userDetails: findUser,
+      });
     }
   } else if (!findUser && !hashedPassword) {
     res.json({ invalidUser: "Invalid email or passowrd" });
@@ -100,12 +104,33 @@ exports.signupUser = asyncCatch(async (req, res) => {
   const token = genToken(userSignedup._id);
   // console.log(token);
   if (userSignedup) {
-    res.cookie("user", token, {secure: true});
+    res.cookie("user", token);
     res.status(201).json({
+      success:true,
       message: "Account created Successfuly",
       userDetails: userSignedup,
     });
   } else {
     res.json({ ErrorMessage: "Password and Confirm password must be same" });
+  }
+});
+
+// This function is for user frontend login
+exports.userLogin = asyncCatch(async (req, res) => {
+  const { email, password } = req.body;
+  const findUser = await signUp.findOne({ email });
+  if (findUser) {
+    const hashedPassword = await bcrypt.compare(password, findUser.password);
+    if (findUser && hashedPassword) {
+      const token = genToken(findUser._id);
+      res.cookie("user", token);
+      res.status(200).json({
+        success: true,
+        message: "successfully logged in",
+        userDetails: findUser,
+      });
+    }
+  } else if (!findUser && !hashedPassword) {
+    res.json({ invalidUser: "Invalid email or passowrd" });
   }
 });
