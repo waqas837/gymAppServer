@@ -12,6 +12,7 @@ const hppSecurity = require("hpp");
 const appError = require("../Utils/appErrors");
 const userRoutes = require("../Routes/UserRoutes");
 const courseRoutes = require("../Routes/CourseRoutes");
+const LearnerTrainerDashboardsRoutes = require("../Routes/LearnerTrainerDashboardsRoutes");
 //related to the like database is down/any other problem
 // process.on("uncaughtException", (err) => {
 //   console.log(`server is shutting down...`);
@@ -28,7 +29,7 @@ app.use(helmet()); //headers protection
 app.use(morgan("dev"));
 app.use(
   cors({
-    origin: ["http://localhost:3000","https://gymapp1122.herokuapp.com/"],
+    origin: ["http://localhost:3000", "https://gymapp1122.herokuapp.com/"],
     credentials: true,
   })
 );
@@ -53,6 +54,7 @@ app.get("/", (req, res) => {
 // });
 app.use("/api/user", userRoutes);
 app.use("/api/courses", courseRoutes);
+app.use("/api/learnerOrTrainer", LearnerTrainerDashboardsRoutes);
 //except the above routes,let's caught it
 app.all("*", (req, res, next) => {
   next(new appError(`Can't find ${req.originalUrl} on server`, 404));

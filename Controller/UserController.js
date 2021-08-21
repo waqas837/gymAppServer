@@ -52,13 +52,11 @@ exports.adminlogin = asyncCatch(async (req, res) => {
     } else if (findUser && hashedPassword) {
       const token = genToken(findUser._id);
       res.cookie("admin", token);
-      res
-        .status(200)
-        .json({
-          success: true,
-          message: "successfully logged in",
-          userDetails: findUser,
-        });
+      res.status(200).json({
+        success: true,
+        message: "successfully logged in",
+        userDetails: findUser,
+      });
     }
   }
 });
@@ -83,12 +81,12 @@ exports.login = asyncCatch(async (req, res) => {
   }
 });
 
-// Following api are for user loginAnd Signup from frontend
-// 1.user singup
+// Following api are for user loginAnd Signup from frontend;
+//1.user signup
 exports.signupUser = asyncCatch(async (req, res) => {
-  const { username, email, password } = req.body;
-  // console.log(req.body);
-  // if user exists
+  const { username, email, password, role } = req.body;
+
+  //if user exists
   const userAlreadyExists = await signUp.findOne({ email });
   if (userAlreadyExists) {
     res.json({
@@ -100,30 +98,31 @@ exports.signupUser = asyncCatch(async (req, res) => {
     username,
     email,
     password: hashedPassword,
+    role,
   });
   const token = genToken(userSignedup._id);
-  // console.log(token);
   if (userSignedup) {
-    res.cookie("user", token);
+    res.cookie(userSignedup.role, token);
     res.status(201).json({
-      success:true,
+      success: true,
       message: "Account created Successfuly",
       userDetails: userSignedup,
     });
-  } else {
-    res.json({ ErrorMessage: "Password and Confirm password must be same" });
   }
 });
 
 // This function is for user frontend login
 exports.userLogin = asyncCatch(async (req, res) => {
   const { email, password } = req.body;
+  // console.log(email, password);
   const findUser = await signUp.findOne({ email });
+
   if (findUser) {
     const hashedPassword = await bcrypt.compare(password, findUser.password);
+    console.log(hashedPassword);
     if (findUser && hashedPassword) {
       const token = genToken(findUser._id);
-      res.cookie("user", token);
+      res.cookie(findUser.role, token);
       res.status(200).json({
         success: true,
         message: "successfully logged in",
@@ -134,3 +133,4 @@ exports.userLogin = asyncCatch(async (req, res) => {
     res.json({ invalidUser: "Invalid email or passowrd" });
   }
 });
+ 
